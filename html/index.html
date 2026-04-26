@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distortionz Assassin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Inter, Arial, Helvetica, sans-serif;
+            background: transparent;
+        }
+
+        #app {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            place-items: center;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 75% 20%, rgba(255, 0, 72, 0.24), transparent 28%),
+                radial-gradient(circle at 20% 80%, rgba(255, 0, 72, 0.10), transparent 30%),
+                rgba(0, 0, 0, 0.34);
+            backdrop-filter: blur(4px);
+        }
+
+        .contract-card {
+            position: relative;
+            width: 455px;
+            padding: 24px;
+            color: #ffffff;
+            border-radius: 26px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background:
+                linear-gradient(145deg, rgba(15, 15, 22, 0.94), rgba(5, 5, 10, 0.88)),
+                radial-gradient(circle at top right, rgba(255, 0, 72, 0.20), transparent 34%);
+            box-shadow:
+                0 24px 80px rgba(0, 0, 0, 0.65),
+                0 0 45px rgba(255, 46, 97, 0.20),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+            animation: popIn 180ms ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: #ff2e61;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .subtitle {
+            margin: 8px 0 0;
+            color: rgba(255, 255, 255, 0.58);
+            font-size: 13px;
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            border: 0;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.08);
+            transition: 150ms ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 46, 97, 0.30);
+        }
+
+        .target-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-bottom: 14px;
+            border-radius: 22px;
+            background:
+                linear-gradient(135deg, rgba(255, 46, 97, 0.22), rgba(255, 46, 97, 0.04)),
+                rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .label {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.58);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        #targetAlias {
+            margin: 6px 0 0;
+            font-size: 31px;
+            letter-spacing: -0.05em;
+        }
+
+        .zone {
+            margin: 7px 0 0;
+            color: rgba(255, 255, 255, 0.56);
+            font-size: 13px;
+        }
+
+        .skull-icon {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff2e61, #8b0029);
+            box-shadow: 0 0 34px rgba(255, 46, 97, 0.35);
+        }
+
+        .skull-icon span {
+            font-size: 29px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card {
+            padding: 14px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .stat-card p {
+            margin: 0 0 7px;
+            color: rgba(255, 255, 255, 0.50);
+            font-size: 12px;
+        }
+
+        .stat-card strong {
+            font-size: 18px;
+        }
+
+        .reward-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.26);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        #rewardAmount {
+            margin: 6px 0 3px;
+            font-size: 29px;
+            letter-spacing: -0.05em;
+        }
+
+        #rewardType {
+            color: #ff6d8d;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .cash-badge {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 17px;
+            background: linear-gradient(135deg, #28ff83, #087c3b);
+            color: #ffffff;
+            font-size: 23px;
+            font-weight: 900;
+            box-shadow: 0 0 28px rgba(40, 255, 131, 0.22);
+        }
+
+        .intel-panel {
+            padding: 16px;
+            margin-bottom: 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        #intelText {
+            margin: 8px 0 0;
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 14px;
+            line-height: 1.42;
+        }
+
+        .warning-box {
+            padding: 13px 14px;
+            margin-bottom: 14px;
+            border-radius: 16px;
+            background: rgba(255, 175, 46, 0.09);
+            border: 1px solid rgba(255, 175, 46, 0.16);
+        }
+
+        .warning-box strong {
+            color: #ffca75;
+            font-size: 13px;
+        }
+
+        .warning-box p {
+            margin: 5px 0 0;
+            color: rgba(255, 255, 255, 0.56);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .accept-btn {
+            width: 100%;
+            height: 52px;
+            border: 0;
+            border-radius: 17px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff2e61, #a30030);
+            box-shadow: 0 14px 34px rgba(255, 46, 97, 0.28);
+            transition: 150ms ease;
+        }
+
+        .accept-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 40px rgba(255, 46, 97, 0.36);
+        }
+
+        .accept-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error-text {
+            min-height: 18px;
+            margin: 12px 0 0;
+            color: #ff6d8d;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .active-contract {
+            position: fixed;
+            right: 28px;
+            bottom: 120px;
+            width: 310px;
+            padding: 16px;
+            color: white;
+            border-radius: 20px;
+            background:
+                linear-gradient(145deg, rgba(15, 15, 22, 0.92), rgba(5, 5, 10, 0.86)),
+                radial-gradient(circle at top right, rgba(255, 0, 72, 0.16), transparent 42%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+            display: none;
+        }
+
+        .active-header,
+        .active-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .active-header span {
+            color: #ff2e61;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        #activeTimer {
+            font-size: 18px;
+        }
+
+        .active-body {
+            margin: 14px 0;
+        }
+
+        .active-body p {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .active-body small {
+            display: block;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.52);
+        }
+
+        .active-footer span {
+            color: rgba(255, 255, 255, 0.68);
+            font-size: 13px;
+            text-transform: capitalize;
+        }
+
+        .active-footer strong {
+            color: #28ff83;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="overlay"></div>
+
+        <main class="contract-card">
+            <section class="top-bar">
+                <div>
+                    <p class="eyebrow">Distortionz Underground</p>
+                    <h1>Assassin Contract</h1>
+                    <p class="subtitle">Private work. No names. No witnesses.</p>
+                </div>
+
+                <button id="closeBtn" class="close-btn">×</button>
+            </section>
+
+            <section class="target-panel">
+                <div>
+                    <p class="label">Target Alias</p>
+                    <h2 id="targetAlias">Unknown</h2>
+                    <p id="targetZone" class="zone">Unknown Zone</p>
+                </div>
+
+                <div class="skull-icon">
+                    <span>☠</span>
+                </div>
+            </section>
+
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <p>Behavior</p>
+                    <strong id="behavior">Unknown</strong>
+                </div>
+
+                <div class="stat-card">
+                    <p>Police Risk</p>
+                    <strong id="policeRisk">Unknown</strong>
+                </div>
+
+                <div class="stat-card">
+                    <p>Time Limit</p>
+                    <strong id="timeLimit">0 Min</strong>
+                </div>
+
+                <div class="stat-card">
+                    <p>Search Radius</p>
+                    <strong id="searchRadius">0m</strong>
+                </div>
+            </section>
+
+            <section class="reward-panel">
+                <div>
+                    <p class="label">Contract Payment</p>
+                    <h3 id="rewardAmount">$0</h3>
+                    <span id="rewardType">Dirty Money</span>
+                </div>
+
+                <div class="cash-badge">$</div>
+            </section>
+
+            <section class="intel-panel">
+                <p class="label">Target Intel</p>
+                <p id="intelText">Awaiting encrypted intel...</p>
+            </section>
+
+            <section class="warning-box">
+                <strong>Risk Notice</strong>
+                <p>Once accepted, the contract cannot be changed. Eliminate the mark before time expires.</p>
+            </section>
+
+            <button id="acceptBtn" class="accept-btn">Accept Contract</button>
+            <p id="errorText" class="error-text"></p>
+        </main>
+    </div>
+
+    <div id="activeContract" class="active-contract">
+        <div class="active-header">
+            <span>Active Contract</span>
+            <strong id="activeTimer">00:00</strong>
+        </div>
+
+        <div class="active-body">
+            <p id="activeAlias">Unknown Target</p>
+            <small id="activeZone">Unknown Zone</small>
+        </div>
+
+        <div class="active-footer">
+            <span id="activeBehavior">Unknown</span>
+            <strong id="activeReward">$0</strong>
+        </div>
+    </div>
+
+    <script>
+        const app = document.getElementById('app');
+        const activeContract = document.getElementById('activeContract');
+
+        const closeBtn = document.getElementById('closeBtn');
+        const acceptBtn = document.getElementById('acceptBtn');
+
+        const targetAlias = document.getElementById('targetAlias');
+        const targetZone = document.getElementById('targetZone');
+        const behavior = document.getElementById('behavior');
+        const policeRisk = document.getElementById('policeRisk');
+        const timeLimit = document.getElementById('timeLimit');
+        const searchRadius = document.getElementById('searchRadius');
+        const rewardAmount = document.getElementById('rewardAmount');
+        const rewardType = document.getElementById('rewardType');
+        const intelText = document.getElementById('intelText');
+        const errorText = document.getElementById('errorText');
+
+        const activeTimer = document.getElementById('activeTimer');
+        const activeAlias = document.getElementById('activeAlias');
+        const activeZone = document.getElementById('activeZone');
+        const activeBehavior = document.getElementById('activeBehavior');
+        const activeReward = document.getElementById('activeReward');
+
+        function formatMoney(value) {
+            const number = Number(value) || 0;
+            return '$' + number.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+
+        function formatMinutes(seconds) {
+            const sec = Number(seconds) || 0;
+            const minutes = Math.floor(sec / 60);
+            return `${minutes} Min`;
+        }
+
+        function formatTimer(seconds) {
+            const sec = Math.max(0, Number(seconds) || 0);
+            const minutes = Math.floor(sec / 60);
+            const remaining = sec % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remaining).padStart(2, '0')}`;
+        }
+
+        function titleCase(value) {
+            if (!value) return 'Unknown';
+
+            return String(value)
+                .replace(/_/g, ' ')
+                .replace(/\w\S*/g, function(word) {
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                });
+        }
+
+        function getResourceName() {
+            if (typeof GetParentResourceName === 'function') {
+                return GetParentResourceName();
+            }
+
+            return 'distortionz_assassin';
+        }
+
+        function postNui(name, data = {}) {
+            return fetch(`https://${getResourceName()}/${name}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(data)
+            }).then(function(response) {
+                return response.json();
+            });
+        }
+
+        function setError(message) {
+            errorText.textContent = message || '';
+        }
+
+        function openUI(data) {
+            targetAlias.textContent = data.targetAlias || 'Unknown';
+            targetZone.textContent = data.targetZone || 'Unknown Zone';
+            behavior.textContent = titleCase(data.behavior);
+            policeRisk.textContent = data.policeRisk || 'Unknown';
+            timeLimit.textContent = formatMinutes(data.timeLimit);
+            searchRadius.textContent = `${Number(data.searchRadius) || 0}m`;
+            rewardAmount.textContent = formatMoney(data.rewardAmount);
+            rewardType.textContent = data.rewardItemLabel || 'Dirty Money';
+            intelText.textContent = data.intel || 'Encrypted intel unavailable.';
+
+            acceptBtn.disabled = false;
+            setError('');
+
+            app.style.display = 'grid';
+        }
+
+        function closeUI() {
+            app.style.display = 'none';
+            setError('');
+        }
+
+        function openActive(data) {
+            activeAlias.textContent = data.targetAlias || 'Unknown Target';
+            activeZone.textContent = data.targetZone || 'Unknown Zone';
+            activeBehavior.textContent = titleCase(data.behavior);
+            activeReward.textContent = formatMoney(data.rewardAmount);
+            activeTimer.textContent = formatTimer(data.remainingSeconds);
+
+            activeContract.style.display = 'block';
+        }
+
+        function updateActive(data) {
+            activeAlias.textContent = data.targetAlias || 'Unknown Target';
+            activeZone.textContent = data.targetZone || 'Unknown Zone';
+            activeBehavior.textContent = titleCase(data.behavior);
+            activeReward.textContent = formatMoney(data.rewardAmount);
+            activeTimer.textContent = formatTimer(data.remainingSeconds);
+        }
+
+        function closeActive() {
+            activeContract.style.display = 'none';
+        }
+
+        window.addEventListener('message', function(event) {
+            const payload = event.data;
+
+            if (!payload || !payload.action) return;
+
+            if (payload.action === 'open') {
+                openUI(payload.data || {});
+            }
+
+            if (payload.action === 'close') {
+                closeUI();
+            }
+
+            if (payload.action === 'activeOpen') {
+                openActive(payload.data || {});
+            }
+
+            if (payload.action === 'activeUpdate') {
+                updateActive(payload.data || {});
+            }
+
+            if (payload.action === 'activeClose') {
+                closeActive();
+            }
+        });
+
+        closeBtn.addEventListener('click', function() {
+            postNui('cancelContract').then(function() {
+                closeUI();
+            });
+        });
+
+        acceptBtn.addEventListener('click', function() {
+            acceptBtn.disabled = true;
+            setError('');
+
+            postNui('acceptContract').then(function(result) {
+                if (!result || !result.success) {
+                    setError(result && result.message ? result.message : 'Unable to accept contract.');
+                    acceptBtn.disabled = false;
+                    return;
+                }
+
+                closeUI();
+            }).catch(function() {
+                setError('NUI callback failed.');
+                acceptBtn.disabled = false;
+            });
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                postNui('cancelContract').then(function() {
+                    closeUI();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
