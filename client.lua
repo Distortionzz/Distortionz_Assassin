@@ -605,7 +605,10 @@ local function SpawnBoss()
         false,
         false
     )
-
+    Entity(bossPed).state:set('distortionz_protected_ped', true, true)
+    Entity(bossPed).state:set('distortionz_boss_ped', true, true)
+    Entity(bossPed).state:set('distortionz_assassin_boss', true, true)
+    
     SetEntityAsMissionEntity(bossPed, true, true)
     PlaceObjectOnGroundProperly(bossPed)
     SetBlockingOfNonTemporaryEvents(bossPed, true)
