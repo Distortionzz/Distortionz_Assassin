@@ -313,7 +313,6 @@ local function SpawnStandingTarget(contract)
     )
 
     SetEntityAsMissionEntity(targetPed, true, true)
-    PlaceObjectOnGroundProperly(targetPed)
     SetupTargetCombat(targetPed)
 
     local scenario = Config.Target.standingScenarios[math.random(#Config.Target.standingScenarios)]
@@ -341,7 +340,6 @@ local function SpawnWalkingTarget(contract)
     )
 
     SetEntityAsMissionEntity(targetPed, true, true)
-    PlaceObjectOnGroundProperly(targetPed)
     SetupTargetCombat(targetPed)
 
     TaskWanderStandard(targetPed, 10.0, 10)
@@ -368,7 +366,6 @@ local function SpawnBuildingTarget(contract)
     )
 
     SetEntityAsMissionEntity(targetPed, true, true)
-    PlaceObjectOnGroundProperly(targetPed)
     SetupTargetCombat(targetPed)
 
     local scenario = Config.Target.buildingScenarios[math.random(#Config.Target.buildingScenarios)]
@@ -610,7 +607,6 @@ local function SpawnBoss()
     Entity(bossPed).state:set('distortionz_assassin_boss', true, true)
     
     SetEntityAsMissionEntity(bossPed, true, true)
-    PlaceObjectOnGroundProperly(bossPed)
     SetBlockingOfNonTemporaryEvents(bossPed, true)
     SetPedCanRagdoll(bossPed, false)
     SetEntityInvincible(bossPed, true)

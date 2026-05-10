@@ -3,7 +3,7 @@ Config = {}
 Config.Debug = false
 
 Config.ResourceName = 'distortionz_assassin'
-Config.CurrentVersion = '1.1.1'
+Config.CurrentVersion = '1.1.4'
 
 Config.VersionCheck = {
     enabled = true,
@@ -23,7 +23,7 @@ Config.Cooldown = {
 
 Config.Boss = {
     model = 'g_m_m_chigoon_02',
-    coords = vector4(144.41, -2203.39, 4.69, 355.0),
+    coords = vec4(141.53, -2204.15, 3.69, 315.9),
 
     scenario = 'WORLD_HUMAN_SMOKING',
 

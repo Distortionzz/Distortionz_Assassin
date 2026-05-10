@@ -1,89 +1,52 @@
-# ☠️ distortionz_assassin
+# Distortionz Assassin
 
-Premium illegal assassin contract job for FiveM Qbox/Ox servers.
+> Illegal assassination contract job for Qbox/FiveM — target dispatch, contract acceptance NUI, weapon handout, escalating police alerts, and tiered payouts.
 
-`distortionz_assassin` is part of the **Distortionz illegal job ecosystem**. Players meet an underground Assassin Boss, receive contract intel through a premium NUI, track down a target, eliminate them, and receive dirty money through `ox_inventory`.
-
----
-
-## 📌 Overview
-
-This resource creates a high-end illegal contract system for roleplay servers. It is built around immersive contract hunting, dirty money payouts, police risk, cooldowns, target behaviors, and a premium Distortionz-style user interface.
-
-Players do not just press a button and receive money. They receive a contract, search a marked area, track a moving or hidden target, complete the hit, and then get paid in `black_money`.
+![FiveM](https://img.shields.io/badge/FiveM-cerulean-yellow?style=flat-square&labelColor=181b20)
+![Qbox](https://img.shields.io/badge/Qbox-required-red?style=flat-square&labelColor=dfb317)
+![License](https://img.shields.io/badge/License-MIT-brightgreen?style=flat-square)
+![Version](https://img.shields.io/github/v/release/Distortionzz/Distortionz_Assassin?style=flat-square&color=d4aa62&label=version)
 
 ---
 
-## ✨ Features
+## Overview
 
-### 🧾 Contract System
-- Premium NUI contract board
-- Target alias system
-- Random target zones
-- Random ped models
-- Randomized contract reward
-- Dirty money payout
-- Contract expiration timer
-- Cooldown after success or failure
+Underground contract assassin job. Players accept hits via a contact ped, get dispatched to a target spawn (standing, walking, or building), and earn payouts scaled by speed, stealth, and headshot accuracy.
 
-### 🎯 Target Behavior
-Targets can spawn with different behaviors:
+## Features
 
-- 🧍 Standing
-- 🚶 Walking
-- 🚗 Driving
-- 🏚️ Building / hidden nearby
+- Random target spawn types (standing, walking, building entry)
+- Contract acceptance NUI with target intel and payout preview
+- Optional weapon handout per contract tier
+- Escalating police alert chance based on collateral / stealth breaks
+- Cooldowns + max active contracts per player
+- Protected-ped flagging so other distortionz scripts skip the contact ped
 
-### 🗺️ Search Area System
-- Search radius blip
-- Center search marker
-- Optional exact target blip for testing
-- Moving search area that follows the target
-- Configurable update interval
+## Dependencies
 
-### 🚨 Police Risk
-- Configurable police alert chance
-- Police-only alert blip
-- Job-based police alert filtering
-- Alert location based on contract area
+| Resource | Required | Purpose |
+|---|---|---|
+| `qbx_core` | yes | Player data, money |
+| `ox_lib` | yes | Callbacks, notify fallback |
+| `ox_target` | yes | Contact ped interaction |
+| `ox_inventory` | yes | Weapon handout, item rewards |
+| `distortionz_notify` | optional | Branded notifications |
 
-### 💸 Rewards
-- Uses `ox_inventory`
-- Pays dirty money item:
-  - `black_money`
-- Driving contracts can pay bonus rewards
-- Reward range is fully configurable
+## Installation
 
-### 🧠 Premium UI
-- Dark transparent Distortionz theme
-- Red glow accents
-- Contract preview board
-- Active contract overlay
-- Live timer
-- Reward display
-- Target zone display
-- Behavior display
+```cfg
+ensure distortionz_assassin
+```
 
-### 🔔 Notifications
-- Uses `distortionz_notify` if running
-- Falls back to `ox_lib` notifications
+## Configuration
 
-### 🧩 Compatibility
-- Qbox compatible
-- Ox compatible
-- ox_lib
-- ox_target
-- ox_inventory
-- Optional Distortionz Notify support
+See [`config.lua`](config.lua) for contact ped location, target spawn pools, payout tiers, weapon handout, and police alert thresholds.
 
-### 🌐 Version Checking
-- GitHub `version.json` support
-- Configurable version check URL
-- Console update notifications
+## Credits
 
----
+- **Author:** Distortionz
+- **Framework:** [Qbox Project](https://github.com/Qbox-project)
 
-## 📁 Resource Name
+## License
 
-```txt
-distortionz_assassin
+MIT — see [LICENSE](LICENSE).

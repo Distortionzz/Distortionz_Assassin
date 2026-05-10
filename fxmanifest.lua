@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Distortionz'
 description 'Distortionz Assassin - Illegal assassination contract job for Qbox/Ox servers'
-version '1.1.1'
+version '1.1.4'
 
 lua54 'yes'
 
